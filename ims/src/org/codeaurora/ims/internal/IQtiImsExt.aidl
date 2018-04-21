@@ -1,4 +1,4 @@
-/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2015-2017, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -34,11 +34,12 @@ import org.codeaurora.ims.internal.IQtiImsExtListener;
  * Interface through which APP and vendor communicates.
  * {@hide}
  */
-oneway interface IQtiImsExt {
+interface IQtiImsExt {
    /**
      * setCallForwardingUncondTimerOptions
      * sets a call forwarding unconditional Timer option.
      *
+     * @param phoneId indicates the phone instance which triggered the request
      * @param startHour indicates starting hour
      * @param startMinute indicates starting minute
      * @param endHour indicates ending hour
@@ -53,48 +54,51 @@ oneway interface IQtiImsExt {
      *        SERVICE_CLASS, as defined in
      *        <code>com.android.internal.telephony.CommandsInterface.</code>
      * @param dialingNumber is the target phone number to forward calls to
-     * @param QtiImsExtListener listener to request
+     * @param listener an IQtiImsExtListener instance to indicate the response
      * @return void
      */
-    void setCallForwardUncondTimer(int startHour, int startMinute, int endHour, int endMinute,
-            int action, int reason, int serviceClass, String dialingNumber,
+    oneway void setCallForwardUncondTimer(int phoneId, int startHour, int startMinute, int endHour,
+            int endMinute, int action, int reason, int serviceClass, String dialingNumber,
             IQtiImsExtListener listener);
 
    /**
      * getCallForwardingUncondTimerOptions
      * gets a call forwarding option.
      *
+     * @param phoneId indicates the phone instance which triggered the request
      * @param reason is one of the valid call forwarding
      *        CF_REASONS, as defined in
      *        <code>com.android.internal.telephony.CommandsInterface.</code>
      * @param serviceClass is service class, that is used to get CFT
      *        SERVICE_CLASS, as defined in
      *        <code>com.android.internal.telephony.CommandsInterface.</code>
-     * @param QtiImsExtListener listener to request
+     * @param listener an IQtiImsExtListener instance to indicate the response
      * @return void
      */
-    void getCallForwardUncondTimer(int reason, int serviceClass,
+    oneway void getCallForwardUncondTimer(int phoneId, int reason, int serviceClass,
             IQtiImsExtListener listener);
 
     /**
       * Total number of packets sent or received
       *
+      * @param phoneId indicates the phone instance which triggered the request
       * @param listener, provided if caller needs to be notified for get result.
       * @return void
       *
       * @throws RemoteException if calling the IMS service results in an error.
       */
-    void getPacketCount(IQtiImsExtListener listener);
+    oneway void getPacketCount(int phoneId, IQtiImsExtListener listener);
 
    /**
      * Total number of packet errors encountered
      *
+     * @param phoneId indicates the phone instance which triggered the request
      * @param listener, provided if caller needs to be notified for get result.
      * @return void
      *
      * @throws RemoteException if calling the IMS service results in an error.
      */
-    void getPacketErrorCount(IQtiImsExtListener listener);
+    oneway void getPacketErrorCount(int phoneId, IQtiImsExtListener listener);
 
    /**
      * sendCallDeflectRequest
@@ -105,7 +109,7 @@ oneway interface IQtiImsExt {
      * @param listener an IQtiImsExtListener instance to indicate the response
      * @return void
      */
-    void sendCallDeflectRequest(int phoneId, String deflectNumber,
+    oneway void sendCallDeflectRequest(int phoneId, String deflectNumber,
             IQtiImsExtListener listener);
 
    /**
@@ -113,12 +117,161 @@ oneway interface IQtiImsExt {
      * Transfer an established call to given number or call id
      *
      * @param phoneId indicates the phone instance which triggered the request
-     * @param type is one of the values QTI_IMS_TRANSFER_TYPE_*, as defined in
-     *        <code>org.codeaurora.ims.qtiims.QtiImsInterfaceUtils.</code>
+     * @param type is one of the values QTI_IMS_*_TRANSFER, as defined in
+     *        <code>org.codeaurora.ims.utils.QtiImsExtUtils.</code>
      * @param number indicates the target number to transfer
-     * @param listener an IQtiImsInterfaceListener instance to indicate the response
+     * @param listener an IQtiImsExtListener instance to indicate the response
      * @return void
      */
-    void sendCallTransferRequest(int phoneId, int type, String number,
+    oneway void sendCallTransferRequest(int phoneId, int type, String number,
             IQtiImsExtListener listener);
+
+   /**
+     * sendCancelModifyCall
+     * cancel a call modify request
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param listener an IQtiImsExtListener instance to indicate the response
+     * @return void
+     */
+    oneway void sendCancelModifyCall(int phoneId, IQtiImsExtListener listener);
+
+    /**
+     * Query Vops information
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param listener an IQtiImsExtListener instance to indicate the response
+     * @return void
+     */
+    oneway void queryVopsStatus(int phoneId, IQtiImsExtListener listener);
+
+   /**
+     * Query Ssac information
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param listener an IQtiImsExtListener instance to indicate the response
+     * @return void
+     */
+    oneway void querySsacStatus(int phoneId, IQtiImsExtListener listener);
+
+   /**
+     * resumePendingCall
+     * This API shall continue to place DIAL request with videoState as either
+     * Video or Voice based on user confirmation on low battery MO Video call
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param videoState indicates either Video or Voice type
+     * @return void
+     */
+    oneway void resumePendingCall(int phoneId, int videoState);
+
+   /**
+     * Register for Pariticipant status information
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param listener, to get notified for participant status information.
+     * @return void
+     *
+     */
+    oneway void registerForParticipantStatusInfo(int phoneId, IQtiImsExtListener listener);
+
+   /**
+     * updateVoltePreference
+     * Updates the user's VoLTE preference to lower layers
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param preference is one of the values QTI_IMS_VOLTE_PREF_*, as defined in
+     *        <code>org.codeaurora.ims.utils.QtiImsExtUtils.</code>
+     * @param listener an IQtiImsExtListener instance to indicate the response
+     * @return void
+     */
+    oneway void updateVoltePreference(int phoneId, int preference, IQtiImsExtListener listener);
+
+   /**
+     * queryVoltePreference
+     * Retrieves the user's VoLTE preference from lower layers
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param listener an IQtiImsExtListener instance to indicate the response
+     * @return void
+     */
+    oneway void queryVoltePreference(int phoneId, IQtiImsExtListener listener);
+
+   /**
+     * getHandoverConfig
+     * Get IMS Handover Enabled status
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param listener, provided if caller needs to be notified for get result.
+     * @return void
+     *
+     * @throws RemoteException if calling the IMS service results in an error.
+     */
+    oneway void getHandoverConfig(int phoneId, IQtiImsExtListener listener);
+
+   /**
+     * setHandoverConfig
+     * Set IMS Handover Enabled status
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param hoConfig is one of the values QTI_IMS_HO_*, as defined in
+     *        <code>org.codeaurora.ims.utils.QtiImsExtUtils</code>
+     * @param listener, provided if caller needs to be notified for set result.
+     * @return void
+     *
+     * @throws RemoteException if calling the IMS service results in an error.
+     */
+    oneway void setHandoverConfig(int phoneId, int hoConfig, IQtiImsExtListener listener);
+
+   /**
+     * getRcsAppConfig
+     * Get default sms app.
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @return int is one of the values QTI_IMS_SMS_APP_*, as defined in
+     *        <code>org.codeaurora.ims.utils.QtiImsExtUtils</code>
+     *
+     * @throws RemoteException if calling the IMS service results in an error.
+     */
+    int getRcsAppConfig(int phoneId);
+
+   /**
+     * setRcsAppConfig
+     * Set default sms app.
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param defaultSmsApp is one of the values QTI_IMS_SMS_APP_*, as defined in
+     *        <code>org.codeaurora.ims.utils.QtiImsExtUtils</code>
+     * @return int is one of the values OperationStatusConstants *, as defined in
+     *        <code>com.android.ims.ImsConfig</code>
+     *
+     * @throws RemoteException if calling the IMS service results in an error.
+     */
+    int setRcsAppConfig(int phoneId, int defaultSmsApp);
+
+   /**
+     * getVvmAppConfig
+     * Get default video voice mail app.
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @return int is one of the values QTI_IMS_VVM_APP_*, as defined in
+     *        <code>org.codeaurora.ims.utils.QtiImsExtUtils</code>
+     *
+     * @throws RemoteException if calling the IMS service results in an error.
+     */
+    int getVvmAppConfig(int phoneId);
+
+   /**
+     * setVvmAppConfig
+     * Set default video voice mail app.
+     *
+     * @param phoneId indicates the phone instance which triggered the request
+     * @param defaultVvmApp is one of the values QTI_IMS_VVM_APP_*, as defined in
+     *        <code>org.codeaurora.ims.utils.QtiImsExtUtils</code>
+     * @return int is one of the values OperationStatusConstants *, as defined in
+     *        <code>com.android.ims.ImsConfig</code>
+     *
+     * @throws RemoteException if calling the IMS service results in an error.
+     */
+    int setVvmAppConfig(int phoneId, int defaultVvmApp);
 }

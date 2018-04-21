@@ -28,7 +28,7 @@
 
 package org.codeaurora.ims;
 
-import android.telephony.ims.ImsReasonInfo;
+import com.android.ims.ImsReasonInfo;
 
 /**
  * The class contains definitions for Qti specific constants related to any
@@ -69,15 +69,25 @@ public class QtiCallConstants {
     /* Call encryption status extra key. The value will be a boolean. */
     public static final String CALL_ENCRYPTION_EXTRA_KEY = "CallEncryption";
 
+    /* Call History Info extra key. The value will be a ArrayList of Strings. */
+    public static final String EXTRAS_CALL_HISTORY_INFO = "CallHistoryInfo";
+
     /* Call fail code extra key name */
     public static final String EXTRAS_KEY_CALL_FAIL_EXTRA_CODE  = "CallFailExtraCode";
 
     /* Call fail error code for handover not feasible */
     public static final int CALL_FAIL_EXTRA_CODE_LTE_3G_HA_FAILED = 149;
 
+    /* Call fail error code for validate Video call number */
+    public static final int CALL_FAIL_EXTRA_CODE_LOCAL_VALIDATE_NUMBER = 150;
+
     /* Call fail error code for Retry CS call*/
     public static final int CALL_FAIL_EXTRA_CODE_CALL_CS_RETRY_REQUIRED =
             ImsReasonInfo.CODE_LOCAL_CALL_CS_RETRY_REQUIRED;
+
+    /* Calls are rejected due to low battery */
+    public static final int CALL_FAIL_EXTRA_CODE_LOCAL_LOW_BATTERY =
+            ImsReasonInfo.CODE_LOCAL_LOW_BATTERY;
 
     /* Unknown disconnect cause */
     public static final int DISCONNECT_CAUSE_UNSPECIFIED = -1;
@@ -130,6 +140,10 @@ public class QtiCallConstants {
     /* Orientation mode extra key name */
     public static final String ORIENTATION_MODE_EXTRA_KEY = "OrientationMode";
 
+    /* Video call dataUsage Key that holds the data usage consumed by Video call
+       on LTE/WLAN RATs */
+    public static final String VIDEO_CALL_DATA_USAGE_KEY = "dataUsage";
+
     /* low battery extra key name that contains a boolean value,
        TRUE meaning battery is low else FALSE */
     public static final String LOW_BATTERY_EXTRA_KEY = "LowBattery";
@@ -170,11 +184,14 @@ public class QtiCallConstants {
     /* Downgrade of a vt call due to generic error */
     public static final int CAUSE_CODE_SESSION_MODIFY_DOWNGRADE_GENERIC_ERROR = 11;
 
-    /* Upgrade/downgrade of a volte/vt call is rejected due to low battery */
-    public static final int CAUSE_CODE_SESSION_MODIFY_REQUEST_LOW_BATTERY = 12;
-
     /* Session modification cause extra key name */
     public static final String SESSION_MODIFICATION_CAUSE_EXTRA_KEY = "SessionModificationCause";
+
+    /** Modify call error due to low battery
+     *  Value should not conflict with videoProvider.
+     *      {@link VideoProvider#SESSION_MODIFY_REQUEST_REJECTED*}
+     */
+    public static final int SESSION_MODIFY_REQUEST_FAILED_LOW_BATTERY = 50;
 
     /**
      * Local device supports downgrade to voice
@@ -190,5 +207,85 @@ public class QtiCallConstants {
      * Add participant in an active or conference call option
      */
     public static final int CAPABILITY_ADD_PARTICIPANT = 0x02000000;
+
+    /* Invalid phone Id */
+    public static final int INVALID_PHONE_ID = -1;
+
+    /**
+     * Extra indicating the Wifi Quality
+     * <p>
+     * Type: int (one of the VOWIFI_QUALITY_* values)
+     */
+    public static final String VOWIFI_CALL_QUALITY_EXTRA_KEY = "VoWiFiCallQuality";
+
+    public static final int VOWIFI_QUALITY_NONE = 0;
+    public static final int VOWIFI_QUALITY_EXCELLENT = 1;
+    public static final int VOWIFI_QUALITY_FAIR = 2;
+    public static final int VOWIFI_QUALITY_POOR = 4;
+
+    /**
+     * Extra indicating the conference support from lower layers
+     * <p>
+     * Type: boolean (true if conference is supported else false)
+     */
+    public static final String CONF_SUPPORT_IND_EXTRA_KEY = "ConfSupportInd";
+
+    public static final String EXTRA_PHONE_ID = "phoneId";
+
+    /**
+     * Whether RTT is on or off
+     * The value 1 - enable, 0 - disable
+     * This is set through ImsSettings UI
+     */
+    public static final String QTI_IMS_RTT_MODE = "rtt_mode";
+
+   /**
+     * Property for RTT Operating mode
+     * For TMO - 0 : Upon Request Mode (Disabled)
+     *           1 : Automatic Mode (Full)
+     * For Vzw - 0 : Full Mode (Full)
+     *
+     */
+    public static final String PROPERTY_RTT_OPERATING_MODE = "persist.radio.rtt.operval";
+
+    // RTT Off
+    public static final int RTT_MODE_DISABLED = 0;
+
+    // RTT On
+    public static final int RTT_MODE_FULL = 1;
+
+   /**
+     * Broadcast Action: Send RTT Text Message
+     */
+    public static final String ACTION_SEND_RTT_TEXT =
+            "org.codeaurora.intent.action.send.rtt.text";
+
+   /**
+     * RTT Text Value
+     */
+    public static final String RTT_TEXT_VALUE =
+            "org.codeaurora.intent.action.rtt.textvalue";
+
+   /**
+     * Broadcast Action: RTT Operation
+     */
+    public static final String ACTION_RTT_OPERATION =
+            "org.codeaurora.intent.action.send.rtt.operation";
+
+   /**
+     * RTT Operation Type
+     */
+    public static final String RTT_OPERATION_TYPE =
+            "org.codeaurora.intent.action.rtt.operation.type";
+
+    // RTT Operation Type can be one of the following
+    // To request upgrade of regular call to RTT call
+    public static final int RTT_UPGRADE_INITIATE = 1;
+    // To accept incoming RTT upgrade request
+    public static final int RTT_UPGRADE_CONFIRM = 2;
+    // To reject incoming RTT upgrade request
+    public static final int RTT_UPGRADE_REJECT = 3;
+    // To request downgrade of RTT call to regular call
+    public static final int RTT_DOWNGRADE_INITIATE = 4;
 }
 
