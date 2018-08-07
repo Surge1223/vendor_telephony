@@ -7,6 +7,7 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src/org) \
     $(call all-Iaidl-files-under, src/org) \
     $(call all-logtags-files-under, src/org)
 
+LOCAL_SDK_VERSION := current
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := telephony-ext
 LOCAL_MODULE_OWNER := qti

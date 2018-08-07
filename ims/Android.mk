@@ -10,6 +10,7 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src/org) \
 LOCAL_JAVA_LIBRARIES := ims-common
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := ims-ext-common
+LOCAL_SDK_VERSION := current
 
 include $(BUILD_STATIC_JAVA_LIBRARY)
 
